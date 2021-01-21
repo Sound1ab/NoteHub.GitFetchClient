@@ -19,7 +19,12 @@ export async function request({
   if (body) {
     body = await collect(body);
   }
-  const res = await fetch(url, { method, headers, body });
+  const res = await fetch(url, {
+    method,
+    headers,
+    body,
+    credentials: "include",
+  });
   const iter =
     res.body && res.body.getReader
       ? fromStream(res.body)
