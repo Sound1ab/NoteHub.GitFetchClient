@@ -27,9 +27,10 @@ export const request = async ({
     body: collectedBody,
     credentials: "include",
   });
-
+  console.log('outer',)
   if (res.status === 401) {
-    const response = await fetch("http://localhost:3000/dev/refresh", {
+    console.log('inner')
+    const response = await fetch("https://843ic7az1e.execute-api.eu-west-1.amazonaws.com/dev/refresh", {
       method: "GET",
       headers,
       credentials: "include",
