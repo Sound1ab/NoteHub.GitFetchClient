@@ -15,7 +15,10 @@
     "webpack-cli": "^4.4.0"
   },
   "dependencies": {
-    "@babel/polyfill": "^7.12.1"
+    "@babel/polyfill": "^7.12.1",
+    "@vercel/fetch-retry": "^5.0.3",
+    "fetch-retry": "^4.1.0",
+    "refresh-fetch": "^0.7.0"
   },
   "scripts": {
     "build": "webpack --mode production"

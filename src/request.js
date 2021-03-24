@@ -2,29 +2,60 @@
 import { collect } from "./utils/collect.js";
 import { fromStream } from "./utils/fromStream";
 
-/**
- * HttpClient
- *
- * @param {GitHttpRequest} request
- * @returns {Promise<GitHttpResponse>}
- */
-export async function request({
+export const request = async ({
   onProgress,
   url,
   method = "GET",
   headers = {},
   body,
-}) {
-  // streaming uploads aren't possible yet in the browser
-  if (body) {
-    body = await collect(body);
+  retryAttempt = 0,
+}) => {
+  if (retryAttempt === 2) {
+    throw new Error("Too many retries");
   }
+
+  // streaming uploads aren't possible yet in the browser
+  let collectedBody
+
+  if (body) {
+    collectedBody = await collect(body);
+  }
+  
   const res = await fetch(url, {
     method,
     headers,
-    body,
+    body: collectedBody,
     credentials: "include",
   });
+
+  if (res.status === 401) {
+    const response = await fetch("http://localhost:3000/dev/refresh", {
+      method: "GET",
+      headers,
+      credentials: "include",
+    });
+
+    const jwt = await response.json();
+
+    if (response.status !== 200 || response.statusText !== "OK" || !jwt) {
+      throw new Error("No refresh token");
+    }
+
+    onRefresh(jwt)
+
+    return request({
+      onProgress,
+      url,
+      method,
+      headers: {
+        ...headers,
+        Authorization: `Bearer ${jwt}`,
+      },
+      body,
+      retryAttempt: retryAttempt + 1,
+    });
+  }
+
   const iter =
     res.body && res.body.getReader
       ? fromStream(res.body)
