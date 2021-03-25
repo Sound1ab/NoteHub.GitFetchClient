@@ -4,7 +4,7 @@ module.exports = {
   mode: "development",
   entry: "./src/request.js",
   output: {
-    path: path.resolve(__dirname, "dist"),
+    path: path.resolve(__dirname, "lib"),
     filename: "index.js",
     libraryTarget: "commonjs2",
   },
