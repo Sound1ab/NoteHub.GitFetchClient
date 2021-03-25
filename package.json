@@ -1,7 +1,7 @@
 {
   "name": "NoteHub.GitFetchClient",
   "version": "1.0.0",
-  "main": "dist/index.js",
+  "main": "lib/index.js",
   "repository": "https://github.com/Sound1ab/NoteHub.GitFetchClient.git",
   "author": "sound1ab <phillip-parker@outlook.com>",
   "license": "MIT",
